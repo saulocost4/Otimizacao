@@ -1,28 +1,28 @@
 clc
 mc=[            //matriz dos coeficientes
-1 -12 -15 0 0 0 0 0;
-0 1 0 1 0 0 0 3; 
-0 0 1 0 1 0 0 4; 
-0 1 1 0 0 1 0 6; 
-0 1 3 0 0 0 1 13; 
+1 -4 -2 -2 0 0 0;
+0 1 1 2 1 0 4; 
+0 4 -5 3 0 1 30;  
 ]
 x=zeros(1,(size(mc)(2)-2))
 
-
+disp(mc)
 /* INICIALIZAÇÃO DA MATRIZ E DO VETOR DE VARIAVEIS*/
 var_maximi=2
-quo=10^9
+
 var_parada=0
-valor_menor=mc(1,2)
 mc_original=mc
+passos=0
 //RECURSIVIDADE
 while var_parada==0
+valor_menor=mc(1,2)
 var_maximi=2
 var_parada=1 
 var_obj=zeros(2)
+quo=10^9
 //ENCONTRANDO AS VARIÁVEIS NÃO BÁSICAS E A VARIÁVEL A SER MAXIMIZADA(QUE VAI ENTRAR NA BASE)
 contador=1
-    for i=2:size(mc)(2)
+    for i=2:size(mc)(2)-1
         if (i~=2 & mc(1,i)<valor_menor)
             valor_menor=mc(1,i)
             var_maximi=i
@@ -53,16 +53,15 @@ mc(num_eq,var_maximi)=1
             end
         end
     end
-    
+
     for i=1:(size(mc)(1))
-        for j=1:(size(mc)(2))
-            if(i~=num_eq & mc(i,var_maximi)~=0) then
-                mc(i,j)=mc(i,j)-(mc(i,var_maximi)*mc(num_eq,j))         
-            end
+        if(i~=num_eq & mc(i,var_maximi)~=0) then
+                mc(i,var_maximi)=0         
         end
     end
+
 //PARANDO O WHILE AO ENCONTRAR A SOLUÇÃO ÓTIMA    
-    for i=2:size(mc)(2)
+    for i=2:size(mc)(2)-1
        if(mc(1,i)<0) then
           var_parada=0
        end        
@@ -73,7 +72,8 @@ mc(num_eq,var_maximi)=1
             contador=contador+1
         end
     end
-
+passos=passos+1
+pause
 end
 
 //ENCONTRANDO OS VALORES DO VETOR DE VARIÁVEIS PARA A SOLUÇÃO ÓTIMA x(1...n)
